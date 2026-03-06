@@ -4,6 +4,7 @@ import { initializeApp } from "firebase/app";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 import { getDatabase, push, ref, set, update, get, onValue } from "firebase/database";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -19,6 +20,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const database = getDatabase(app);
+const auth = getAuth(app);
 
 export const saveUserName = async (userName) => {
   const collection = ref(database, 'demo-user');
@@ -45,3 +47,8 @@ export const listenUsers = (callback) => {
   });
 }
 
+export const login = async () => {
+  const provider = new GoogleAuthProvider();
+  const result = await signInWithPopup(auth, provider);
+  console.log('user info', result);
+}
