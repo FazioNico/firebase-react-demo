@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
-import { database, getUsers, listenAuth, listenUsers, login, saveUserName } from "./firebase";
+import { database, getUsers, listenAuth, listenUsers, login, logout, saveUserName } from "./firebase";
 
 function App() {
   const [userName, setUserName] = useState("");
@@ -32,7 +30,8 @@ function App() {
       <button onClick={() => saveUserName(userName)}>
         Save user name
       </button>
-      <button onClick={()=> login()}>login</button>
+      {!user && <button onClick={()=> login()}>login</button>}
+      {user && <button onClick={()=> logout()}>logout</button>}
     </>
   );
 }
