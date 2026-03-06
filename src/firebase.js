@@ -55,10 +55,24 @@ export const login = async () => {
 
 export const listenAuth = (callback) => {
   onAuthStateChanged(auth, (user)=> {
+    if (user) {
+      // save user into database
+      const collection = ref(database, 'demo-user/' + user.uid);
+      update(collection, {
+        name: user.displayName,
+      });
+    }
     callback(user);
   });
 }
 
 export const logout = async () => {
   await signOut(auth);
+}
+
+export const getUserSettings = async (userId) => {
+  const collection = ref(database, 'demo-user/' + userId);
+  const snapshot = await get(collection);
+  const data = snapshot.val();
+  return data;
 }

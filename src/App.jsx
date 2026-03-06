@@ -1,22 +1,34 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import "./App.css";
-import { database, getUsers, listenAuth, listenUsers, login, logout, saveUserName } from "./firebase";
+import { database, getUsers, getUserSettings, listenAuth, listenUsers, login, logout, saveUserName } from "./firebase";
 
 function App() {
   const [userName, setUserName] = useState("");
   const [usersList, setUsersList] = useState([]);
   const [user, setUser] = useState(null);
+  const [userSettings, setUserSettings] = useState(null);
 
   useEffect(()=> {
     listenUsers(setUsersList);
     listenAuth(setUser);
   }, []);
 
+  useEffect(() => {
+    if (!user) {
+      setUserSettings(null);
+      return;
+    }
+    getUserSettings(user.uid).then(data => {
+      setUserSettings(data);
+    })
+  }, [user]);
+
 
   return (
     <>
       <h1>Firebase demo</h1>
       {user && <p>Welcome, {user.displayName}</p>}
+      {userSettings && <p>Admin: {userSettings.isAdmin ? "Yes" : "No"}</p>}
       <ul>
         {usersList.map((user, index) => (
           <li key={index}>{user.name}</li>
