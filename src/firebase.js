@@ -76,3 +76,21 @@ export const getUserSettings = async (userId) => {
   const data = snapshot.val();
   return data;
 }
+
+/**
+ * 
+ * Basic firebase rules access
+{
+  "rules": {
+    ".write": "false",
+ 		".read": true,
+		"demo-user": {
+      "$user_id": {
+        // grants write access to the owner of this user account
+        // whose uid must exactly match the key ($user_id)
+        ".write": "$user_id === auth.uid"
+      }
+    }
+  }
+}
+   */
